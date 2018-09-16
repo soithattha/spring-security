@@ -17,15 +17,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * @version
  * @description
  */
-//@Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication()
-//                .withUser("soithattha").password("123456").roles("USER");
-//    }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()

@@ -49,7 +49,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CustomAuthenticationProvider provider = new CustomAuthenticationProvider();
         provider.setUserDetailService(userDetailsService);
         auth.authenticationProvider(provider);
-
     }
 
     @Override

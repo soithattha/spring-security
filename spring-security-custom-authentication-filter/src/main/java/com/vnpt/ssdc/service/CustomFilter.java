@@ -76,7 +76,7 @@ public class CustomFilter extends GenericFilterBean {
             if (auth == null) {
                 return;
             }
-            
+            SecurityContextHolder.getContext().setAuthentication(auth);
             handler.onAuthenticationSuccess(request, response, auth);
         }
     }

@@ -1,0 +1,11 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>TODO supply a title</title>
+    </head>
+    <body>
+        <h1>Login success! This is home page</h1>
+        <h1 th:text="${user.getPrincipal()}"></h1>
+        <h3 th:each="role : ${user.getAuthorities()}" th:text="${role}"> 
+        </h3>
+    </body>
+</html>

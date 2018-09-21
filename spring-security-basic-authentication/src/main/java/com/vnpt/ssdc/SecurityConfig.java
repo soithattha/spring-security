@@ -30,24 +30,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("temporary").password("temporary").roles("ADMIN");
+                .withUser("soithatha").password("123456").roles("ADMIN");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // khi add them configure httpBasic() he thong se add them mot filter BasicAuthenticationFilter
         http
                 .csrf().disable()
                 .exceptionHandling()
                 .and()
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .anyRequest().authenticated().and().httpBasic().authenticationEntryPoint(restAuthenticationEntryPoint)
-                .and()
-                .formLogin()
-                .failureHandler(new SimpleUrlAuthenticationFailureHandler())
-                .and()
-                .logout();
+                .anyRequest().authenticated().and().httpBasic().authenticationEntryPoint(restAuthenticationEntryPoint);
 
     }
 

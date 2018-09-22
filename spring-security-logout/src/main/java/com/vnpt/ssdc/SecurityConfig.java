@@ -5,8 +5,9 @@
  */
 package com.vnpt.ssdc;
 
-import com.vnpt.ssdc.service.MyAuthenticationEntryPoint;
+import com.vnpt.ssdc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,26 +24,25 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private MyAuthenticationEntryPoint restAuthenticationEntryPoint;
+    @Qualifier("userDetailsService")
+    private UserService userDetailsService;
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth)
-            throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("soithatha").password("123456").roles("ADMIN");
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService);
+
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .exceptionHandling()
-                .and()
-                .authorizeRequests()
+        http.authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .anyRequest().authenticated();
-        http.httpBasic().authenticationEntryPoint(restAuthenticationEntryPoint);
-
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .permitAll();
+        http.logout().logoutSuccessUrl("/login").logoutUrl("/logout").permitAll();
     }
 
 }

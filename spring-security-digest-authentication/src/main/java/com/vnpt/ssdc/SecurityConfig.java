@@ -5,7 +5,9 @@
  */
 package com.vnpt.ssdc;
 
+import com.vnpt.ssdc.service.UserDeailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,45 +26,36 @@ import org.springframework.security.web.authentication.www.DigestAuthenticationF
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth)
-            throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("soithattha").password("123456").roles("ADMIN");
-    }
+    @Autowired
+    @Qualifier("userDetailsService")
+    private UserDeailsService userDetailsService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests()
-//                .antMatchers("/login").permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin()
-//                .loginPage("/login")
-//                .permitAll();
 
         http.addFilter(digestAuthenticationFilter()) // register digest entry point
                 .exceptionHandling().authenticationEntryPoint(digestEntryPoint()) // on exception ask for digest authentication
                 .and()
                 .authorizeRequests()
                 .antMatchers("/login").permitAll() // /home will be accessible directly, no need of any authentication
-                .anyRequest().authenticated();
+                .anyRequest().authenticated().and()
+                .exceptionHandling().accessDeniedPage("/403");
 
     }
 
     DigestAuthenticationFilter digestAuthenticationFilter() throws Exception {
         DigestAuthenticationFilter digestAuthenticationFilter = new DigestAuthenticationFilter();
-        digestAuthenticationFilter.setUserDetailsService(userDetailsServiceBean());
+        digestAuthenticationFilter.setUserDetailsService(userDetailsService);
         digestAuthenticationFilter.setAuthenticationEntryPoint(digestEntryPoint());
         return digestAuthenticationFilter;
     }
 
     @Bean
-    DigestAuthenticationEntryPoint digestEntryPoint() {
-        DigestAuthenticationEntryPoint bauth = new DigestAuthenticationEntryPoint();
-        bauth.setRealmName("Soithattha");
-        bauth.setKey("123456789");
-        return bauth;
+    DigestAuthenticationEntryPoint digestEntryPoint() { 
+        DigestAuthenticationEntryPoint dAuth = new DigestAuthenticationEntryPoint();
+        dAuth.setRealmName("soithatha");
+        dAuth.setKey("123456");
+        return dAuth;
     }
 
 }

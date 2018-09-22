@@ -9,6 +9,7 @@ import com.vnpt.ssdc.service.IsUser;
 import com.vnpt.ssdc.service.TestRoleService;
 import javax.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,30 +23,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
-    @Autowired
-    private TestRoleService service;
-
     @GetMapping("/")
     public String login(Model model) {
         model.addAttribute("user", SecurityContextHolder.getContext().getAuthentication());
         return "home";
     }
 
-    @GetMapping("/edit")
-    public String edit() {
-        service.editSomething();
-        return "user";
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String accessAdminPage() {
+        return "admin";
     }
 
-    @GetMapping("/delete")
-    public String delete() {
-        service.deleteSomething();
-        return "user";
-    }
-
-    @GetMapping("/view")
-    public String user() {
-        service.viewSomething();
+    @GetMapping("/user")
+    @RolesAllowed("ROLE_USER")
+    public String accessUserPage() {
         return "user";
     }
 

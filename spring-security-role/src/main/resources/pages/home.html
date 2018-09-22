@@ -4,8 +4,13 @@
     </head>
     <body>
         <h1>Login success! This is home page</h1>
-        <h1 th:text="${user.getPrincipal()}"></h1>
+        <h2> Your role: </h2>
         <h3 th:each="role : ${user.getAuthorities()}" th:text="${role}"> 
         </h3>
+        <h3>-------------------------------------------</h3>
+
+        <a th:href="@{/admin}">This link can access by admin role</a>
+        <br /><br />
+        <a th:href="@{/user}">This link can access by user role</a>
     </body>
 </html>

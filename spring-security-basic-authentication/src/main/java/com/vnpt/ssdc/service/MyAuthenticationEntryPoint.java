@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 @Component("restAuthenticationEntryPoint")
 public class MyAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
 
-    private String REALM = "KIENDT";
+    private String REALM = "soithatha";
 
     @Override
     public void commence(
